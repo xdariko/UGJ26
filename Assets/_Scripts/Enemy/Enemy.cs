@@ -1,6 +1,6 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class Enemy : MonoBehaviour
 {
@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     public int etherReward = 1;
 
     int hp;
+
+    public event Action OnDied;
 
     void Awake() => hp = maxHp;
 
@@ -19,6 +21,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        OnDied?.Invoke();
         SpawnEtherOrbs(etherReward);
         Destroy(gameObject);
     }
@@ -41,7 +44,7 @@ public class Enemy : MonoBehaviour
         orb.value = v;
         orb.SetTarget(G.circleCenter);
 
-        Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(0.4f, 1.2f);
+        Vector2 offset = UnityEngine.Random.insideUnitCircle.normalized * UnityEngine.Random.Range(0.4f, 1.2f);
         Vector3 popPos = startPos + (Vector3)offset;
 
         orbGO.transform.localScale = Vector3.zero;

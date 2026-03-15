@@ -5,6 +5,9 @@ public class Main : MonoBehaviour
 {
     [SerializeField] Transform circleCenter;
     [SerializeField] GameObject etherOrbPrefab;
+    [SerializeField] private WaveSet waveSet;
+    [SerializeField] private EnemySpawner spawner;
+    public int StageIndex { get; private set; } = 0;
 
     private void Awake()
     {
@@ -13,6 +16,12 @@ public class Main : MonoBehaviour
         G.etherOrbPrefab = etherOrbPrefab;
     }
 
+    private void Start()
+    {
+        ApplyStage(0);
+    }
+
+    
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -33,5 +42,28 @@ public class Main : MonoBehaviour
 
         if (G.ui != null)
             G.ui.SetPausePanel(paused);
+    }
+
+    private void ApplyStage(int stage)
+    {
+        if(waveSet == null || waveSet.waves == null || waveSet.waves.Length == 0)
+        {
+            Debug.Log("WaveSet not set");
+            return;
+        }
+
+        stage = Mathf.Clamp(stage, 0, waveSet.waves.Length - 1);
+        spawner.SetWave(waveSet.waves[stage]); 
+    }
+
+    private void AdvanceStage()
+    {
+        StageIndex++;
+        if(StageIndex >= 3)
+        {
+            /////
+            StageIndex = 0;
+        }
+        ApplyStage(StageIndex);
     }
 }
