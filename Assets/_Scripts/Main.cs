@@ -3,9 +3,14 @@ using UnityEngine.InputSystem;
 
 public class Main : MonoBehaviour
 {
+    [SerializeField] Transform circleCenter;
+    [SerializeField] GameObject etherOrbPrefab;
+
     private void Awake()
     {
         G.main = this;
+        G.circleCenter = circleCenter;
+        G.etherOrbPrefab = etherOrbPrefab;
     }
 
     private void Update()
