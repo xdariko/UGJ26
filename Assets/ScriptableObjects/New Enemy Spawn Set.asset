@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f64b8e587c60d0b40adaf0fed1ff2601, type: 3}
+  m_Name: New Enemy Spawn Set
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnSet
+  enemies:
+  - id: 1
+    prefab: {fileID: 8993284299627112029, guid: 9f01c1b0aab3c564ca7d8a0a3aa7fff4, type: 3}
+    unlockedByDefault: 1
+    unlockKey: 1
+    weight: 1
+    spawnShape: 1
+    minRadius: 7
+    maxRadius: 0
+    rectHalfSize: {x: 20, y: 10}
+    maxAlive: 100

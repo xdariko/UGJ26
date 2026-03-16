@@ -5,7 +5,8 @@ public class Main : MonoBehaviour
 {
     [SerializeField] Transform circleCenter;
     [SerializeField] GameObject etherOrbPrefab;
-    [SerializeField] private WaveSet waveSet;
+    [SerializeField] GameObject damagePopupPrefab;
+    [SerializeField] private EnemySpawnSet waveSet;
     [SerializeField] private EnemySpawner spawner;
     public int StageIndex { get; private set; } = 0;
 
@@ -14,11 +15,11 @@ public class Main : MonoBehaviour
         G.main = this;
         G.circleCenter = circleCenter;
         G.etherOrbPrefab = etherOrbPrefab;
+        G.damagePopupPrefab = damagePopupPrefab;
     }
 
     private void Start()
     {
-        ApplyStage(0);
     }
 
     
@@ -42,28 +43,5 @@ public class Main : MonoBehaviour
 
         if (G.ui != null)
             G.ui.SetPausePanel(paused);
-    }
-
-    private void ApplyStage(int stage)
-    {
-        if(waveSet == null || waveSet.waves == null || waveSet.waves.Length == 0)
-        {
-            Debug.Log("WaveSet not set");
-            return;
-        }
-
-        stage = Mathf.Clamp(stage, 0, waveSet.waves.Length - 1);
-        spawner.SetWave(waveSet.waves[stage]); 
-    }
-
-    private void AdvanceStage()
-    {
-        StageIndex++;
-        if(StageIndex >= 3)
-        {
-            /////
-            StageIndex = 0;
-        }
-        ApplyStage(StageIndex);
     }
 }

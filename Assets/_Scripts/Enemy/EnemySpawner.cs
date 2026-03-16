@@ -2,25 +2,51 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private WaveDefinition currentWave;
+    [SerializeField] private EnemySpawnSet spawnSet;
     [SerializeField] private float spawnInterval = 0.8f;
     [SerializeField] private int maxPick = 8;
-    private int[] alive;
-    float t;
 
-    public void Awake()
+    private int[] alive;
+    private float t;
+
+    private void Awake()
     {
-        if (currentWave != null) SetWave(currentWave);
+        Init();
     }
 
-    void Update()
+    private void OnEnable()
     {
-       if(currentWave == null || currentWave.spawns == null || currentWave.spawns.Length == 0) return;
+        G.OnEnemyUnlocked += OnEnemyUnlocked;
+    }
+
+    private void OnDisable()
+    {
+        G.OnEnemyUnlocked -= OnEnemyUnlocked;
+    }
+
+    private void Init()
+    {
+        alive = (spawnSet != null && spawnSet.enemies != null)
+            ? new int[spawnSet.enemies.Length]
+            : null;
+
+        t = 0f;
+    }
+
+    private void OnEnemyUnlocked(string key)
+    {
+        // если нужно, можно тут обновить UI или форснуть спавн
+        // пока ничего специального не требуется
+    }
+
+    private void Update()
+    {
+        if (spawnSet == null || spawnSet.enemies == null || spawnSet.enemies.Length == 0)
+            return;
 
         t += Time.deltaTime;
         if (t < spawnInterval) return;
         t = 0f;
-
 
         if (!AnySpawnAvailable()) return;
 
@@ -29,51 +55,73 @@ public class EnemySpawner : MonoBehaviour
             int idx = PickWeightedRandomIndex();
             if (idx < 0) return;
 
-            var s = currentWave.spawns[idx];
-            if (s.prefab == null) continue;
-            if (alive[idx] >= s.maxAlive) continue;
+            var s = spawnSet.enemies[idx];
+            if (!CanSpawn(idx, s)) continue;
 
             Spawn(idx, s);
             return;
         }
     }
 
-    private int PickWeightedRandomIndex()
+    private bool CanSpawn(int idx, EnemySpawnEntry s)
     {
-        float total = 0f;
-        for (int i = 0; i < currentWave.spawns.Length; i++)
-        {
-            float w = Mathf.Max(0f, currentWave.spawns[i].weight);
-            total += w;
-        }
-        if (total <= 0f) return -1;
+        if (s == null) return false;
+        if (s.prefab == null) return false;
+        if (!G.IsEnemyUnlocked(s.unlockKey, s.unlockedByDefault)) return false;
+        if (alive == null || idx < 0 || idx >= alive.Length) return false;
+        if (alive[idx] >= s.maxAlive) return false;
 
-        float r = UnityEngine.Random.value * total;
-        for (int i = 0; i < currentWave.spawns.Length; i++)
-        {
-            float w = Mathf.Max(0f, currentWave.spawns[i].weight);
-            r -= w;
-            if (r <= 0f) return i;
-        }
-        return currentWave.spawns.Length - 1;
+        return true;
     }
 
     private bool AnySpawnAvailable()
     {
-        for(int i = 0; i < currentWave.spawns.Length; i++)
+        for (int i = 0; i < spawnSet.enemies.Length; i++)
         {
-            var s = currentWave.spawns[i];
-            if(s.prefab == null) continue;
-            if (alive[i] < s.maxAlive) return true;
+            if (CanSpawn(i, spawnSet.enemies[i]))
+                return true;
         }
+
         return false;
     }
 
-    void Spawn(int idx, WaveSpawn s)
+    private int PickWeightedRandomIndex()
     {
+        float total = 0f;
+
+        for (int i = 0; i < spawnSet.enemies.Length; i++)
+        {
+            var s = spawnSet.enemies[i];
+            if (!CanSpawn(i, s)) continue;
+
+            float w = Mathf.Max(0f, s.weight);
+            total += w;
+        }
+
+        if (total <= 0f) return -1;
+
+        float r = UnityEngine.Random.value * total;
+
+        for (int i = 0; i < spawnSet.enemies.Length; i++)
+        {
+            var s = spawnSet.enemies[i];
+            if (!CanSpawn(i, s)) continue;
+
+            float w = Mathf.Max(0f, s.weight);
+            r -= w;
+            if (r <= 0f) return i;
+        }
+
+        return spawnSet.enemies.Length - 1;
+    }
+
+    private void Spawn(int idx, EnemySpawnEntry s)
+    {
+        Vector2 center = G.circleCenter.position;
+
         Vector2 pos = (s.spawnShape == SpawnShape.Rect)
-            ? RandomPointInRectWithMinRadius((Vector2)G.circleCenter.position, s.rectHalfSize, s.minRadius)
-            : RandomPointInRing((Vector2)G.circleCenter.position, s.minRadius, s.maxRadius);
+            ? RandomPointInRectWithMinRadius(center, s.rectHalfSize, s.minRadius)
+            : RandomPointInRing(center, s.minRadius, s.maxRadius);
 
         var go = Instantiate(s.prefab, pos, Quaternion.identity);
 
@@ -89,14 +137,20 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    static Vector2 RandomPointInRing(Vector2 center, float minRadius, float maxRadius)
+    public void SetSpawnSet(EnemySpawnSet newSet)
+    {
+        spawnSet = newSet;
+        Init();
+    }
+
+    private static Vector2 RandomPointInRing(Vector2 center, float minRadius, float maxRadius)
     {
         float r = Mathf.Sqrt(UnityEngine.Random.Range(minRadius * minRadius, maxRadius * maxRadius));
         float a = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         return center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * r;
     }
 
-    static Vector2 RandomPointInRectWithMinRadius(Vector2 center, Vector2 halfSize, float minRadius, int maxTries = 30)
+    private static Vector2 RandomPointInRectWithMinRadius(Vector2 center, Vector2 halfSize, float minRadius, int maxTries = 30)
     {
         float minR2 = minRadius * minRadius;
 
@@ -112,12 +166,5 @@ public class EnemySpawner : MonoBehaviour
 
         float a = Random.Range(0f, Mathf.PI * 2f);
         return center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * minRadius;
-    }
-
-    public void SetWave(WaveDefinition wave)
-    {
-        currentWave = wave;
-        alive = (currentWave?.spawns != null) ? new int[currentWave.spawns.Length] : null;
-        t = 0f;
     }
 }

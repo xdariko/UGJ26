@@ -13,9 +13,10 @@ public class Enemy : MonoBehaviour
 
     void Awake() => hp = maxHp;
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int dmg, bool isCrit = false)
     {
         hp -= dmg;
+        ShowDamagePopup(dmg, isCrit);
         if (hp <= 0) Die();
     }
 
@@ -56,5 +57,21 @@ public class Enemy : MonoBehaviour
             {
                 orb.enabled = true;
             });
+    }
+
+    private void ShowDamagePopup(int dmg, bool isCrit)
+    {
+        if (G.damagePopupPrefab == null) return;
+
+        Vector3 pos = transform.position + new Vector3(
+            UnityEngine.Random.Range(-0.2f, 0.2f),
+            0.5f,
+            0f
+        );
+
+        var go = Instantiate(G.damagePopupPrefab, pos, Quaternion.identity);
+        var popup = go.GetComponent<DamagePopup>();
+        if (popup != null)
+            popup.Setup(dmg, isCrit);
     }
 }

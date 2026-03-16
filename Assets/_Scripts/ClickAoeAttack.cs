@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,11 +30,21 @@ public class ClickAoeAttack : MonoBehaviour
         Vector2 point = new Vector2(world.x, world.y);
 
         int count = Physics2D.OverlapCircle(point, G.ClickRadius, filter, hits);
+        bool anyCrit = false;
+
         for (int i = 0; i < count; i++)
         {
             var enemy = hits[i].GetComponent<Enemy>();
-            if (enemy != null)
-                enemy.TakeDamage(G.ClickDamage);
+            if (enemy == null) continue;
+
+            bool isCrit = Random.value < G.CritChance;
+            int damage = isCrit ? Mathf.RoundToInt(G.ClickDamage * G.CritMultiplier) : G.ClickDamage;
+
+            enemy.TakeDamage(damage, isCrit);
+            if (isCrit) anyCrit = true;
         }
+
+        if (anyCrit && G.screenShake != null)
+            G.screenShake.Shake(1.2f);
     }
 }
