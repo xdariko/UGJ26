@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public static class G
 {
     public static Main main;
     public static UI ui;
+    public static UpgradeTreeManager upgradeTreeManager;
     public static ScreenShake screenShake;
     public static Transform circleCenter;
     public static GameObject etherOrbPrefab;
@@ -83,6 +85,17 @@ public static class G
 
         if (unlockedEnemyKeys.Add(unlockKey))
             OnEnemyUnlocked?.Invoke(unlockKey);
+    }
+
+    public static int GetEther(EtherType etherType)
+    {
+        return etherType switch
+        {
+            EtherType.Red => RedEther,
+            EtherType.White => WhiteEther,
+            EtherType.Purple => PurpleEther,
+            _ => 0,
+        };
     }
 }
 

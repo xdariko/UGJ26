@@ -8,6 +8,7 @@ public class Main : MonoBehaviour
     [SerializeField] GameObject damagePopupPrefab;
     [SerializeField] private EnemySpawnSet waveSet;
     [SerializeField] private EnemySpawner spawner;
+
     public int StageIndex { get; private set; } = 0;
 
     private void Awake()
