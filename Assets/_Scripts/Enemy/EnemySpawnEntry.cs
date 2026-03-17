@@ -16,6 +16,8 @@ public class EnemySpawnEntry
     public bool unlockedByDefault = true;
     public string unlockKey;
 
+    public EnemyReward reward;
+
     public float weight = 1f;
     public SpawnShape spawnShape = SpawnShape.Ring;
 

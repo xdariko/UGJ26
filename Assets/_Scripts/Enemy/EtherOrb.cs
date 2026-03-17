@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EtherOrb : MonoBehaviour
 {
+    public EtherType etherType = EtherType.White;
     public int value = 1;
     public float accel = 25f;
     public float maxSpeed = 18f;
@@ -22,8 +23,8 @@ public class EtherOrb : MonoBehaviour
 
         if (dist <= collectDistance)
         {
-            Debug.Log("Collect ether: " + value);
-            G.AddEther(value);
+            Debug.Log($"Collect {etherType} {value} ");
+            G.AddEther(etherType, value);
             Destroy(gameObject);
             return;
         }

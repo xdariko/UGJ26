@@ -12,8 +12,9 @@ public static class G
 
     public static bool IsPaused;
 
-    public static int Ether;
-    //
+    public static int RedEther;
+    public static int WhiteEther;
+    public static int PurpleEther;
 
     private static readonly HashSet<string> unlockedEnemyKeys = new HashSet<string>();
 
@@ -22,21 +23,50 @@ public static class G
     public static float CritMultiplier = 2f;
     public static float ClickRadius = 0.5f;
 
-    public static event System.Action<int> OnEtherChanged;
+    public static event System.Action<EtherType, int> OnEtherChanged;
     public static event System.Action<string> OnEnemyUnlocked;
 
-    public static void AddEther(int v)
+    public static void AddEther(EtherType type, int v)
     {
-        Ether += v;
-        OnEtherChanged.Invoke(Ether);
+        switch (type)
+        {
+            case EtherType.Red:
+                RedEther += v;
+                OnEtherChanged.Invoke(type, RedEther);
+                break;
+            case EtherType.White:
+                WhiteEther += v;
+                OnEtherChanged.Invoke(type, WhiteEther);
+                break;
+            case EtherType.Purple:
+                PurpleEther += v;
+                OnEtherChanged.Invoke(type, PurpleEther);
+                break;
+        }
     }
 
-    public static bool SpendEther(int v) 
+    public static bool SpendEther(EtherType type, int v) 
     {
-        if (Ether < v) return false;
-        Ether -= v;
-        OnEtherChanged.Invoke(Ether);
-        return true;
+        switch (type)
+        {
+            case EtherType.Red:
+                if (RedEther < v) return false;
+                RedEther -= v;
+                OnEtherChanged.Invoke(type, RedEther);
+                return true;
+            case EtherType.White:
+                if (WhiteEther < v) return false;
+                WhiteEther -= v;
+                OnEtherChanged.Invoke(type, WhiteEther);
+                return true;
+            case EtherType.Purple:
+                if (PurpleEther < v) return false;
+                PurpleEther -= v;
+                OnEtherChanged.Invoke(type, PurpleEther);
+                return true;
+        }
+
+        return false;
     }
 
     public static bool IsEnemyUnlocked(string unlockKey, bool unlockedByDefault)
@@ -54,7 +84,6 @@ public static class G
         if (unlockedEnemyKeys.Add(unlockKey))
             OnEnemyUnlocked?.Invoke(unlockKey);
     }
-
 }
 
 public class ManagedBehaviour : MonoBehaviour
@@ -73,4 +102,11 @@ public class ManagedBehaviour : MonoBehaviour
 
     protected virtual void PausableUpdate() { }
     protected virtual void PausableFixedUpdate() { }
+}
+
+public enum EtherType
+{
+    Red,
+    White,
+    Purple
 }

@@ -35,8 +35,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnemyUnlocked(string key)
     {
-        // если нужно, можно тут обновить UI или форснуть спавн
-        // пока ничего специального не требуется
+
     }
 
     private void Update()
@@ -130,6 +129,7 @@ public class EnemySpawner : MonoBehaviour
         var enemy = go.GetComponent<Enemy>();
         if (enemy != null)
         {
+            enemy.SetupReward(s.reward);
             enemy.OnDied += () =>
             {
                 alive[idx] = Mathf.Max(0, alive[idx] - 1);

@@ -17,6 +17,9 @@ MonoBehaviour:
     prefab: {fileID: 8993284299627112029, guid: 9f01c1b0aab3c564ca7d8a0a3aa7fff4, type: 3}
     unlockedByDefault: 1
     unlockKey: 1
+    reward:
+      etherType: 1
+      amount: 5
     weight: 1
     spawnShape: 1
     minRadius: 7

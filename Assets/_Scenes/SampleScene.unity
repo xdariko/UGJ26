@@ -1485,7 +1485,6 @@ GameObject:
   m_Component:
   - component: {fileID: 575635738}
   - component: {fileID: 575635740}
-  - component: {fileID: 575635739}
   m_Layer: 5
   m_Name: Ether (1)
   m_TagString: Untagged
@@ -1514,19 +1513,6 @@ RectTransform:
   m_AnchoredPosition: {x: 533, y: 452}
   m_SizeDelta: {x: 224.7512, y: 59.1723}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &575635739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 575635737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db9dac7151e6694db2954cde64c2517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EtherUI
-  label: {fileID: 1802656226}
 --- !u!114 &575635740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2830,7 +2816,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1192425538}
   - component: {fileID: 1192425540}
-  - component: {fileID: 1192425539}
   m_Layer: 5
   m_Name: Ether (2)
   m_TagString: Untagged
@@ -2859,19 +2844,6 @@ RectTransform:
   m_AnchoredPosition: {x: 304, y: 452}
   m_SizeDelta: {x: 224.7512, y: 59.1723}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1192425539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192425537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db9dac7151e6694db2954cde64c2517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EtherUI
-  label: {fileID: 775743756}
 --- !u!114 &1192425540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2990,7 +2962,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1235720819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3137,7 +3109,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1283900056}
   - component: {fileID: 1283900057}
-  - component: {fileID: 1283900058}
   m_Layer: 5
   m_Name: Ether
   m_TagString: Untagged
@@ -3192,19 +3163,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1283900058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283900055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db9dac7151e6694db2954cde64c2517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EtherUI
-  label: {fileID: 613821421}
 --- !u!1 &1415679616
 GameObject:
   m_ObjectHideFlags: 0
@@ -4117,6 +4075,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1926211042}
+  - component: {fileID: 1926211043}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -4149,6 +4108,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1926211043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926211041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4db9dac7151e6694db2954cde64c2517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EtherUI
+  redEtherLabel: {fileID: 613821421}
+  whiteEtherLabel: {fileID: 1802656226}
+  purpleEtherLabel: {fileID: 775743756}
 --- !u!1 &2076262691
 GameObject:
   m_ObjectHideFlags: 0

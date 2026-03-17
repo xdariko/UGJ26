@@ -5,13 +5,15 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int maxHp;
-    public int etherReward = 1;
-
     int hp;
+
+    private EnemyReward rewardData;
 
     public event Action OnDied;
 
     void Awake() => hp = maxHp;
+
+    public void SetupReward(EnemyReward reward) => rewardData = reward;
 
     public void TakeDamage(int dmg, bool isCrit = false)
     {
@@ -23,19 +25,21 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         OnDied?.Invoke();
-        SpawnEtherOrbs(etherReward);
-        Destroy(gameObject);
-    }
-
-    void SpawnEtherOrbs(int amount)
-    {
-        for (int i = 0; i < amount; i++)
+        if (rewardData != null) SpawnEtherOrbs(rewardData);
         {
-            SpawnOneOrb(1);
+            Destroy(gameObject);
         }
     }
 
-    void SpawnOneOrb(int v)
+    void SpawnEtherOrbs(EnemyReward reward)
+    {
+        for (int i = 0; i < reward.amount; i++)
+        {
+            SpawnOneOrb(reward.etherType, 1);
+        }
+    }
+
+    void SpawnOneOrb(EtherType type, int v)
     {
         var startPos = transform.position;
         var orbGO = Instantiate(G.etherOrbPrefab, startPos, Quaternion.identity);
@@ -43,6 +47,7 @@ public class Enemy : MonoBehaviour
         var orb = orbGO.GetComponent<EtherOrb>();
         orb.enabled = false;
         orb.value = v;
+        orb.etherType = type;
         orb.SetTarget(G.circleCenter);
 
         Vector2 offset = UnityEngine.Random.insideUnitCircle.normalized * UnityEngine.Random.Range(0.4f, 1.2f);
@@ -58,6 +63,7 @@ public class Enemy : MonoBehaviour
                 orb.enabled = true;
             });
     }
+
 
     private void ShowDamagePopup(int dmg, bool isCrit)
     {
