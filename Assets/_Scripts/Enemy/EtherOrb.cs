@@ -23,7 +23,7 @@ public class EtherOrb : MonoBehaviour
 
         if (dist <= collectDistance)
         {
-            Debug.Log($"Collect {etherType} {value} ");
+            //Debug.Log($"Collect {etherType} {value} ");
             G.AddEther(etherType, value);
             Destroy(gameObject);
             return;

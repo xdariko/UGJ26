@@ -26,3 +26,16 @@ MonoBehaviour:
     maxRadius: 0
     rectHalfSize: {x: 20, y: 10}
     maxAlive: 100
+  - id: 2
+    prefab: {fileID: 7717553929371294601, guid: 85f27c708df086346b54dd786b658c7d, type: 3}
+    unlockedByDefault: 1
+    unlockKey: 1
+    reward:
+      etherType: 1
+      amount: 5
+    weight: 1
+    spawnShape: 1
+    minRadius: 7
+    maxRadius: 0
+    rectHalfSize: {x: 20, y: 10}
+    maxAlive: 100

@@ -8,17 +8,22 @@ public class Enemy : MonoBehaviour
     int hp;
 
     private EnemyReward rewardData;
+    private HitEffect hitEffect;
 
     public event Action OnDied;
 
-    void Awake() => hp = maxHp;
-
+    void Awake()
+    {
+        hp = maxHp;
+        hitEffect = GetComponent<HitEffect>();
+    }
     public void SetupReward(EnemyReward reward) => rewardData = reward;
 
     public void TakeDamage(int dmg, bool isCrit = false)
     {
         hp -= dmg;
         ShowDamagePopup(dmg, isCrit);
+        hitEffect.ApplyHitEffect();
         if (hp <= 0) Die();
     }
 
