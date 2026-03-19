@@ -22,7 +22,16 @@ public class Dissolve : MonoBehaviour
         }
     }
 
-    
+    public Coroutine PlayVanish(MonoBehaviour runner, bool useDissolve = true, bool useVertical = false)
+    {
+        return runner.StartCoroutine(Vanish(useDissolve, useVertical));
+    }
+
+    public Coroutine PlayAppear(MonoBehaviour runner, bool useDissolve = true, bool useVertical = false)
+    {
+        return runner.StartCoroutine(Appear(useDissolve, useVertical));
+    }
+
     private IEnumerator Vanish(bool useDissolve, bool useVertical)
     {
         float elapsedTime = 0f;
@@ -30,7 +39,7 @@ public class Dissolve : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            float lerpedDissolve = Mathf.Lerp(0f, 1.1f, (elapsedTime / dissolveTime));
+            float lerpedDissolve = Mathf.Lerp(0f, 1.5f, (elapsedTime / dissolveTime));
             float lerpedVerticalDissolve = Mathf.Lerp(0f, 1.1f, (elapsedTime / dissolveTime));
 
             for (int i = 0; i < materials.Length; i++)
@@ -52,7 +61,7 @@ public class Dissolve : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            float lerpedDissolve = Mathf.Lerp(1.1f, 0f, (elapsedTime / dissolveTime));
+            float lerpedDissolve = Mathf.Lerp(1.5f, 0f, (elapsedTime / dissolveTime));
             float lerpedVerticalDissolve = Mathf.Lerp(1.1f, 0f, (elapsedTime / dissolveTime));
 
             for (int i = 0; i < materials.Length; i++)

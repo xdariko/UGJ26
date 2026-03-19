@@ -20,10 +20,10 @@ public static class G
 
     private static readonly HashSet<string> unlockedEnemyKeys = new HashSet<string>();
 
-    public static int ClickDamage = 1;
-    public static float CritChance = 0.1f;
+    public static int ClickDamage = 3;
+    public static float CritChance = 0.05f;
     public static float CritMultiplier = 2f;
-    public static float ClickRadius = 0.5f;
+    public static float ClickRadius = 0.3f;
 
     public static event System.Action<EtherType, int> OnEtherChanged;
     public static event System.Action<string> OnEnemyUnlocked;

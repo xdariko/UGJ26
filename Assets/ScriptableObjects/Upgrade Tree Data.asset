@@ -23,17 +23,265 @@ MonoBehaviour:
     levels:
     - costs:
       - etherType: 1
+        amount: 5
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 8
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 12
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 12
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 18
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 26
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 35
+      - etherType: 0
+        amount: 5
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 48
+      - etherType: 0
         amount: 10
       effects:
       - effectType: 0
-        floatValue: 10
-        intValue: 10
+        floatValue: 1
+        intValue: 1
         stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 65
+      - etherType: 0
+        amount: 18
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 85
+      - etherType: 0
+        amount: 30
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 110
+      - etherType: 0
+        amount: 45
+      - etherType: 2
+        amount: 8
+      effects:
+      - effectType: 0
+        floatValue: 1
+        intValue: 1
+        stringValue: 
+  - id: radius
+    title: "+ \u0420\u0430\u0434\u0438\u0443\u0441"
+    description: 
+    unlockedByDefault: 1
+    requiredNodeIds: []
+    maxLevel: 5
+    currentLevel: 0
+    levels:
     - costs:
       - etherType: 1
         amount: 10
       effects:
-      - effectType: 0
-        floatValue: 10
-        intValue: 10
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 16
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 24
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 36
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 48
+      - etherType: 0
+        amount: 6
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 64
+      - etherType: 0
+        amount: 12
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 84
+      - etherType: 0
+        amount: 22
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 105
+      - etherType: 0
+        amount: 36
+      - etherType: 0
+        amount: 6
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+  - id: critchance
+    title: "+ \u0420\u0430\u0434\u0438\u0443\u0441"
+    description: 
+    unlockedByDefault: 1
+    requiredNodeIds: []
+    maxLevel: 5
+    currentLevel: 0
+    levels:
+    - costs:
+      - etherType: 1
+        amount: 10
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 16
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 24
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 36
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 48
+      - etherType: 0
+        amount: 6
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 64
+      - etherType: 0
+        amount: 12
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 84
+      - etherType: 0
+        amount: 22
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
+        stringValue: 
+    - costs:
+      - etherType: 1
+        amount: 105
+      - etherType: 0
+        amount: 36
+      - etherType: 0
+        amount: 6
+      effects:
+      - effectType: 1
+        floatValue: 0.2
+        intValue: 0
         stringValue: 

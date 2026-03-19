@@ -26,5 +26,9 @@ public class EnemySpawnEntry
     public Vector2 rectHalfSize = new Vector2(10f, 6f);
 
     public int maxAlive = 999;
+
+    public bool canTeleport = false;
+    public float teleportEveryMin = 2f;
+    public float teleportEveryMax = 4f;
 }
 

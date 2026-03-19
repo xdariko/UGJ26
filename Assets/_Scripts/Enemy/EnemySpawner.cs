@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private EnemySpawnSet spawnSet;
-    [SerializeField] private float spawnInterval = 0.8f;
+    [SerializeField] private float spawnInterval = 1.6f;
     [SerializeField] private int maxPick = 8;
 
     private int[] alive;
@@ -135,6 +135,12 @@ public class EnemySpawner : MonoBehaviour
                 alive[idx] = Mathf.Max(0, alive[idx] - 1);
             };
         }
+
+        var teleport = go.GetComponent<EnemyTeleport>();
+        if (teleport != null) 
+        {
+            teleport.Setup(s);
+        }
     }
 
     public void SetSpawnSet(EnemySpawnSet newSet)
@@ -143,14 +149,14 @@ public class EnemySpawner : MonoBehaviour
         Init();
     }
 
-    private static Vector2 RandomPointInRing(Vector2 center, float minRadius, float maxRadius)
+    public static Vector2 RandomPointInRing(Vector2 center, float minRadius, float maxRadius)
     {
         float r = Mathf.Sqrt(UnityEngine.Random.Range(minRadius * minRadius, maxRadius * maxRadius));
         float a = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         return center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * r;
     }
 
-    private static Vector2 RandomPointInRectWithMinRadius(Vector2 center, Vector2 halfSize, float minRadius, int maxTries = 30)
+    public static Vector2 RandomPointInRectWithMinRadius(Vector2 center, Vector2 halfSize, float minRadius, int maxTries = 30)
     {
         float minR2 = minRadius * minRadius;
 

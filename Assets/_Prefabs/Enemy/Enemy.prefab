@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3661372526997785110}
   - component: {fileID: 3175127781652831055}
   - component: {fileID: 6231781556747675252}
+  - component: {fileID: 6262434969780197565}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -61,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 071a6684a49c6274fbc365f53b2fe489, type: 2}
+  - {fileID: 2100000, guid: 6084409105dacb949b8328b586f094bd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -156,3 +157,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitEffect
   duration: 0.25
+--- !u!114 &6262434969780197565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8803667223417101661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9d2fd7c27cf1946b37f6d19118b631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyTeleport
+  enabledTeleport: 0
+  teleportEveryMin: 2
+  teleportEveryMax: 4
+  useDissolve: 1
+  useVertical: 0
