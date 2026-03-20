@@ -54,7 +54,6 @@ public class EnemyTeleport :MonoBehaviour
 
     public void Setup(EnemySpawnEntry data)
     {
-        Debug.Log($"Setup teleport for {name}, canTeleport={data.canTeleport}");
         enabledTeleport = data.canTeleport;
         teleportEveryMin = data.teleportEveryMin;
         teleportEveryMax = data.teleportEveryMax;
@@ -72,17 +71,13 @@ public class EnemyTeleport :MonoBehaviour
 
     private IEnumerator TeleportLoop()
     {
-        Debug.Log($"{name}: TeleportLoop started");
-
         while (enabledTeleport)
         {
             float delay = Random.Range(teleportEveryMin, teleportEveryMax);
-            Debug.Log($"{name}: waiting {delay} sec before teleport");
             yield return new WaitForSeconds(delay);
 
             if (isTeleporting) continue;
 
-            Debug.Log($"{name}: teleporting now");
             yield return TeleportOnce();
         }
     }

@@ -57,9 +57,10 @@ public class Enemy : MonoBehaviour
 
         Vector2 offset = UnityEngine.Random.insideUnitCircle.normalized * UnityEngine.Random.Range(0.4f, 1.2f);
         Vector3 popPos = startPos + (Vector3)offset;
+        Vector3 targetScale = orb.transform.localScale;
 
         orbGO.transform.localScale = Vector3.zero;
-        orbGO.transform.DOScale(1f, 0.12f).SetEase(Ease.OutBack);
+        orbGO.transform.DOScale(targetScale, 0.1f).SetEase(Ease.OutBack);
 
         orbGO.transform.DOMove(popPos, 0.18f)
             .SetEase(Ease.OutQuad)
