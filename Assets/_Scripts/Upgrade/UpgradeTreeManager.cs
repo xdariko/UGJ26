@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class UpgradeTreeManager : MonoBehaviour
 {
     [SerializeField] private UpgradeTreeData treeData;
+    private Dictionary<string, int> nodeLevels = new();
 
     private void Awake()
     {
@@ -14,13 +16,14 @@ public class UpgradeTreeManager : MonoBehaviour
     public bool CanBuy(string nodeId)
     {
         UpgradeNode node = GetNode(nodeId);
-        if (node == null) return false;
-        if (node.levels == null || node.levels.Length == 0) return false;
-        if (node.currentLevel < 0 || node.currentLevel >= node.levels.Length) return false;
-        if (node.currentLevel >= node.MaxLevel) return false;
+        if (node == null || node.levels == null) return false;
+
+        int currentLevel = GetCurrentLevel(nodeId);
+
+        if (currentLevel < 0 || currentLevel >= node.levels.Length) return false;
         if (!IsUnlocked(node)) return false;
 
-        UpgradeLevelData levelData = node.levels[node.currentLevel];
+        UpgradeLevelData levelData = node.levels[currentLevel];
         if (levelData == null) return false;
 
         if (levelData.costs != null)
@@ -30,6 +33,7 @@ public class UpgradeTreeManager : MonoBehaviour
                 if (G.GetEther(cost.etherType) < cost.amount) return false;
             }
         }
+
         return true;
     }
 
@@ -39,9 +43,9 @@ public class UpgradeTreeManager : MonoBehaviour
         UpgradeNode node = GetNode(nodeId);
         if (node == null) return false;
         if (!CanBuy(nodeId)) return false;
-        if (node.levels == null || node.currentLevel < 0 || node.currentLevel >= node.levels.Length) return false;
 
-        UpgradeLevelData levelData = node.levels[node.currentLevel];
+        int currentLevel = GetCurrentLevel(nodeId);
+        UpgradeLevelData levelData = node.levels[currentLevel];
 
         if (levelData != null && levelData.costs != null)
         {
@@ -52,7 +56,7 @@ public class UpgradeTreeManager : MonoBehaviour
         }
 
         ApplyEffects(levelData.effects);
-        node.currentLevel++;
+        nodeLevels[nodeId] = currentLevel + 1;
         return true;
     }
 
@@ -98,22 +102,22 @@ public class UpgradeTreeManager : MonoBehaviour
         foreach (string requiredId in node.requiredNodeIds)
         {
             UpgradeNode requiredNode = GetNode(requiredId);
-            if (requiredNode == null || requiredNode.currentLevel <= 0) return false;
+            if (requiredNode == null || GetCurrentLevel(requiredId) <= 0) return false;
         }
         return true;
     }
 
     public int GetCurrentLevel(string nodeId)
     {
-        UpgradeNode node = GetNode(nodeId);
-        return node !=null ? node.currentLevel : 0;
+        return nodeLevels.TryGetValue(nodeId, out var level) ? level : 0;
     }
 
     public bool IsMaxLevel(string nodeId)
     {
         UpgradeNode node = GetNode(nodeId);
-        if (node == null) return true;
-        return node.currentLevel >= node.MaxLevel;
+        if (node == null || node.levels == null) return true;
+
+        return GetCurrentLevel(nodeId) >= node.levels.Length;
     }
 
     public bool ShouldNodeBeVisible(string nodeId)
@@ -126,7 +130,7 @@ public class UpgradeTreeManager : MonoBehaviour
         foreach (string requiredId in node.requiredNodeIds)
         {
             UpgradeNode requiredNode = GetNode(requiredId);
-            if (requiredNode == null || requiredNode.currentLevel <= 0) return false;
+            if (requiredNode == null || GetCurrentLevel(requiredId) <= 0) return false;
         }
         return true;
     }

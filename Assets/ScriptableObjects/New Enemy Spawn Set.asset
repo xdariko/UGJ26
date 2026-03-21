@@ -32,7 +32,7 @@ MonoBehaviour:
   - id: 2
     prefab: {fileID: 7717553929371294601, guid: 85f27c708df086346b54dd786b658c7d, type: 3}
     unlockedByDefault: 0
-    unlockKey: 1
+    unlockKey: rabbit
     reward:
       etherType: 1
       amount: 5

@@ -11,8 +11,6 @@ public class UpgradeNode
 
     public string[] requiredNodeIds;
 
-    [HideInInspector] public int currentLevel = 0;
-
     public UpgradeLevelData[] levels;
 
     public int MaxLevel => levels != null ? levels.Length : 0;
