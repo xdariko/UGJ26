@@ -37,7 +37,6 @@ public class UpgradeTreeManager : MonoBehaviour
         return true;
     }
 
-
     public bool Buy(string nodeId)
     {
         UpgradeNode node = GetNode(nodeId);
@@ -140,6 +139,46 @@ public class UpgradeTreeManager : MonoBehaviour
         UpgradeNode node = GetNode(nodeId);
         if (node == null || node.levels == null) return 0;
         return node.levels.Length;
+    }
+
+    public void GetCurrentLevelCosts(string nodeId, out int whiteCost, out int redCost, out int purpleCost)
+    {
+        whiteCost = 0;
+        redCost = 0;
+        purpleCost = 0;
+
+        UpgradeNode node = GetNode(nodeId);
+        if (node == null) return;
+
+        int currentLevel = GetCurrentLevel(nodeId);
+        if (node.levels == null || currentLevel < 0 || currentLevel >= node.levels.Length) return;
+
+        UpgradeLevelData levelData = node.levels[currentLevel];
+        if (levelData == null || levelData.costs == null) return;
+
+        foreach (var cost in levelData.costs)
+        {
+            switch (cost.etherType)
+            {
+                case EtherType.White: whiteCost += cost.amount; break;
+                case EtherType.Red: redCost += cost.amount; break;
+                case EtherType.Purple: purpleCost += cost.amount; break;
+            }
+        }
+    }
+
+    public string GetNodeTitle(string nodeId)
+    {
+        UpgradeNode node = GetNode(nodeId);
+        if (node == null) return string.Empty;
+        return node.title;
+    }
+
+    public string GetNodeDescription(string nodeId)
+    {
+        UpgradeNode node = GetNode(nodeId);
+        if (node == null) return string.Empty;
+        return node.description;
     }
 }
 

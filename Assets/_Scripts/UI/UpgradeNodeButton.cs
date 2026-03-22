@@ -2,12 +2,14 @@
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
-public class UpgradeNodeButton : MonoBehaviour
+public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private string nodeId;
+
     private UpgradeTreeManager manager;
 
     [SerializeField] private Button button;
@@ -19,6 +21,8 @@ public class UpgradeNodeButton : MonoBehaviour
     [SerializeField] private Color canBuyColor = Color.yellow;
     [SerializeField] private Color cannotBuyColor = Color.gray;
     [SerializeField] private Color maxLevelColor = Color.green;
+
+    [SerializeField] private UpgradeTooltipUI tooltipUI;
 
     private void Awake()
     {
@@ -80,6 +84,37 @@ public class UpgradeNodeButton : MonoBehaviour
             if (obj != null)
                 obj.SetActive(value);
         }
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ShowTooltip();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        HideTooltip();
+    }
+
+    private void ShowTooltip()
+    {
+        if (tooltipUI == null || manager == null) return;
+
+        manager.GetCurrentLevelCosts(nodeId, out int whiteCost, out int redCost, out int purpleCost);
+
+        tooltipUI.Show(
+            manager.GetNodeTitle(nodeId),
+            manager.GetNodeDescription(nodeId),
+            whiteCost,
+            redCost,
+            purpleCost,
+            transform as RectTransform
+        );
+    }
+
+    private void HideTooltip()
+    {
+        if (tooltipUI != null)
+            tooltipUI.Hide();
     }
 }
 

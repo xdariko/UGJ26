@@ -8,10 +8,51 @@ public class EtherOrb : MonoBehaviour
     public float maxSpeed = 18f;
     public float collectDistance = 0.35f;
 
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite whiteSprite;
+    [SerializeField] private Sprite redSprite;
+    [SerializeField] private Sprite purpleSprite;
+
     Transform target;
     Vector2 vel;
 
     public void SetTarget(Transform t) => target = t;
+
+    public void Setup(EtherType type, int orbValue, Transform t)
+    {
+        etherType = type;
+        value = orbValue;
+        target = t;
+        ApplyVisual();
+    }
+
+    void Awake()
+    {
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        ApplyVisual();
+    }
+
+    void ApplyVisual()
+    {
+        if (spriteRenderer == null) return;
+
+        switch (etherType)
+        {
+            case EtherType.White:
+                spriteRenderer.sprite = whiteSprite;
+                break;
+
+            case EtherType.Red:
+                spriteRenderer.sprite = redSprite;
+                break;
+
+            case EtherType.Purple:
+                spriteRenderer.sprite = purpleSprite;
+                break;
+        }
+    }
 
     void Update()
     {

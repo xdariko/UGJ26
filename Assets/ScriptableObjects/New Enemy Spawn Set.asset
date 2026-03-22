@@ -34,7 +34,7 @@ MonoBehaviour:
     unlockedByDefault: 0
     unlockKey: rabbit
     reward:
-      etherType: 1
+      etherType: 0
       amount: 5
     weight: 1
     spawnShape: 1

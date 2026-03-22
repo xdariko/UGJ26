@@ -11,7 +11,7 @@ public static class G
     public static Transform circleCenter;
     public static GameObject etherOrbPrefab;
     public static GameObject damagePopupPrefab;
-
+    public static RitualProgressionManager ritualProgression;
     public static bool IsPaused;
 
     public static int RedEther;
@@ -34,37 +34,37 @@ public static class G
         {
             case EtherType.Red:
                 RedEther += v;
-                OnEtherChanged.Invoke(type, RedEther);
+                OnEtherChanged?.Invoke(type, RedEther);
                 break;
             case EtherType.White:
                 WhiteEther += v;
-                OnEtherChanged.Invoke(type, WhiteEther);
+                OnEtherChanged?.Invoke(type, WhiteEther);
                 break;
             case EtherType.Purple:
                 PurpleEther += v;
-                OnEtherChanged.Invoke(type, PurpleEther);
+                OnEtherChanged?.Invoke(type, PurpleEther);
                 break;
         }
     }
 
-    public static bool SpendEther(EtherType type, int v) 
+    public static bool SpendEther(EtherType type, int v)
     {
         switch (type)
         {
             case EtherType.Red:
                 if (RedEther < v) return false;
                 RedEther -= v;
-                OnEtherChanged.Invoke(type, RedEther);
+                OnEtherChanged?.Invoke(type, RedEther);
                 return true;
             case EtherType.White:
                 if (WhiteEther < v) return false;
                 WhiteEther -= v;
-                OnEtherChanged.Invoke(type, WhiteEther);
+                OnEtherChanged?.Invoke(type, WhiteEther);
                 return true;
             case EtherType.Purple:
                 if (PurpleEther < v) return false;
                 PurpleEther -= v;
-                OnEtherChanged.Invoke(type, PurpleEther);
+                OnEtherChanged?.Invoke(type, PurpleEther);
                 return true;
         }
 
@@ -75,13 +75,13 @@ public static class G
     {
         if (unlockedByDefault) return true;
         if (string.IsNullOrEmpty(unlockKey)) return true;
-        
+
         return unlockedEnemyKeys.Contains(unlockKey);
     }
 
     public static void UnlockEnemy(string unlockKey)
     {
-        if(string.IsNullOrEmpty(unlockKey)) return;
+        if (string.IsNullOrEmpty(unlockKey)) return;
 
         if (unlockedEnemyKeys.Add(unlockKey))
             OnEnemyUnlocked?.Invoke(unlockKey);
@@ -98,6 +98,7 @@ public static class G
         };
     }
 }
+
 
 public class ManagedBehaviour : MonoBehaviour
 {

@@ -51,9 +51,7 @@ public class Enemy : MonoBehaviour
 
         var orb = orbGO.GetComponent<EtherOrb>();
         orb.enabled = false;
-        orb.value = v;
-        orb.etherType = type;
-        orb.SetTarget(G.circleCenter);
+        orb.Setup(type, v, G.circleCenter);
 
         Vector2 offset = UnityEngine.Random.insideUnitCircle.normalized * UnityEngine.Random.Range(0.4f, 1.2f);
         Vector3 popPos = startPos + (Vector3)offset;
@@ -69,7 +67,6 @@ public class Enemy : MonoBehaviour
                 orb.enabled = true;
             });
     }
-
 
     private void ShowDamagePopup(int dmg, bool isCrit)
     {

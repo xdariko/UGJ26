@@ -200,7 +200,7 @@ MonoBehaviour:
         intValue: 0
         stringValue: 
   - id: critchance
-    title: "+ \u0420\u0430\u0434\u0438\u0443\u0441"
+    title: "+ \u041A\u0440\u0438\u0442 \u0448\u0430\u043D\u0441"
     description: 
     unlockedByDefault: 1
     requiredNodeIds: []
@@ -299,11 +299,3 @@ MonoBehaviour:
         floatValue: 0
         intValue: 0
         stringValue: rabbit
-    - costs:
-      - etherType: 1
-        amount: 10
-      effects:
-      - effectType: 4
-        floatValue: 0
-        intValue: 0
-        stringValue: 2

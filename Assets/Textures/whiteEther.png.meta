@@ -103,10 +103,10 @@ TextureImporter:
       name: whiteEther_0
       rect:
         serializedVersion: 2
-        x: 35
-        y: 0
-        width: 458
-        height: 512
+        x: 7
+        y: 5
+        width: 249
+        height: 244
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
