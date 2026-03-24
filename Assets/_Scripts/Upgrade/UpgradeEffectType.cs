@@ -5,5 +5,10 @@ public enum UpgradeEffectType
     AddCritChance,
     AddCritMultiplier,
     UnlockEnemy,
-    MultuplyEtherReward
+
+    AddEnemyMaxAlive,
+    AddEnemyReward,
+    MultiplyEnemyReward,
+
+    MultiplyGlobalSpawnInterval
 }

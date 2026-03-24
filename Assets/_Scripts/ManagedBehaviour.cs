@@ -12,6 +12,9 @@ public static class G
     public static GameObject etherOrbPrefab;
     public static GameObject damagePopupPrefab;
     public static RitualProgressionManager ritualProgression;
+    public static EnemySpawner spawner;
+    public static EnemySpawnSet spawnSet;
+    public static StoryPanelController storyPanel;
     public static bool IsPaused;
 
     public static int RedEther;
@@ -27,6 +30,12 @@ public static class G
 
     public static event System.Action<EtherType, int> OnEtherChanged;
     public static event System.Action<string> OnEnemyUnlocked;
+
+    //-------------------------------------------
+    public static int GlobalEnemyLimitBonus = 0;
+    public static float GlobalSpawnIntervalMultiplier = 1f;
+    public static float GlobalEnemyRewardMultiplier = 1f;
+    //-------------------------------------------
 
     public static void AddEther(EtherType type, int v)
     {

@@ -7,10 +7,62 @@ public class UpgradeTreeManager : MonoBehaviour
 {
     [SerializeField] private UpgradeTreeData treeData;
     private Dictionary<string, int> nodeLevels = new();
+    private Dictionary<string, EnemyRuntimeData> enemyRuntime = new Dictionary<string, EnemyRuntimeData>();
 
     private void Awake()
     {
         G.upgradeTreeManager = this;
+        BuildEnemyRuntime();
+    }
+
+    private void BuildEnemyRuntime()
+    {
+        enemyRuntime.Clear();
+
+        if (G.spawnSet == null || G.spawnSet.enemies == null)
+            return;
+
+        foreach (var enemy in G.spawnSet.enemies)
+        {
+            if (enemy == null) continue;
+            if (string.IsNullOrEmpty(enemy.id)) continue;
+            if (enemyRuntime.ContainsKey(enemy.id)) continue;
+
+            enemyRuntime.Add(enemy.id, new EnemyRuntimeData(
+                enemy.id,
+                enemy.startReward,
+                enemy.startMaxAlive
+            ));
+        }
+    }
+
+    public EnemyRuntimeData GetEnemyRuntime(string enemyId)
+    {
+        EnsureEnemyRuntimeBuilt();
+
+        if (string.IsNullOrEmpty(enemyId))
+            return null;
+
+        enemyRuntime.TryGetValue(enemyId, out var data);
+        return data;
+    }
+
+    public int GetEnemyMaxAlive(string enemyId, int fallbackValue)
+    {
+        EnemyRuntimeData data = GetEnemyRuntime(enemyId);
+        return data != null ? data.maxAlive : fallbackValue;
+    }
+
+    public EnemyReward GetEnemyReward(string enemyId, EnemyReward fallbackValue)
+    {
+        EnemyRuntimeData data = GetEnemyRuntime(enemyId);
+        return data != null ? data.reward : fallbackValue;
+    }
+
+    private void EnsureEnemyRuntimeBuilt()
+    {
+        if (enemyRuntime.Count > 0) return;
+        BuildEnemyRuntime();
     }
 
     public bool CanBuy(string nodeId)
@@ -63,25 +115,60 @@ public class UpgradeTreeManager : MonoBehaviour
     {
         if (effects == null) return;
 
-        foreach(var effect in effects)
+        foreach (var effect in effects)
         {
             switch (effect.effectType)
             {
                 case UpgradeEffectType.AddClickDamage:
                     G.ClickDamage += effect.intValue;
                     break;
+
                 case UpgradeEffectType.AddClickRadius:
                     G.ClickRadius += effect.floatValue;
                     break;
+
                 case UpgradeEffectType.AddCritChance:
                     G.CritChance += effect.floatValue;
                     break;
+
                 case UpgradeEffectType.AddCritMultiplier:
                     G.CritMultiplier += effect.floatValue;
                     break;
+
                 case UpgradeEffectType.UnlockEnemy:
                     G.UnlockEnemy(effect.stringValue);
                     break;
+
+                case UpgradeEffectType.AddEnemyMaxAlive:
+                    {
+                        EnemyRuntimeData data = GetEnemyRuntime(effect.stringValue);
+                        if (data != null)
+                            data.maxAlive += effect.intValue;
+                        break;
+                    }
+
+                case UpgradeEffectType.AddEnemyReward:
+                    {
+                        EnemyRuntimeData data = GetEnemyRuntime(effect.stringValue);
+                        if (data != null && data.reward != null)
+                            data.reward.amount += effect.intValue;
+                        break;
+                    }
+
+                case UpgradeEffectType.MultiplyEnemyReward:
+                    {
+                        EnemyRuntimeData data = GetEnemyRuntime(effect.stringValue);
+                        if (data != null && data.reward != null)
+                            data.reward.amount = Mathf.Max(1, Mathf.RoundToInt(data.reward.amount * effect.floatValue));
+                        break;
+                    }
+
+                case UpgradeEffectType.MultiplyGlobalSpawnInterval:
+                    {
+                        if (G.spawner != null)
+                            G.spawner.SpawnInterval *= effect.floatValue;
+                        break;
+                    }
 
             }
         }
@@ -90,13 +177,13 @@ public class UpgradeTreeManager : MonoBehaviour
     private UpgradeNode GetNode(string nodeId)
     {
         if (treeData == null || treeData.nodes == null) return null;
-        return treeData.nodes.FirstOrDefault(n=> n.id == nodeId);
+        return treeData.nodes.FirstOrDefault(n => n.id == nodeId);
     }
 
     private bool IsUnlocked(UpgradeNode node)
     {
-        if(node.unlockedByDefault) return true;
-        if(node.requiredNodeIds == null || node.requiredNodeIds.Length == 0) return true;
+        if (node.unlockedByDefault) return true;
+        if (node.requiredNodeIds == null || node.requiredNodeIds.Length == 0) return true;
 
         foreach (string requiredId in node.requiredNodeIds)
         {
@@ -182,3 +269,22 @@ public class UpgradeTreeManager : MonoBehaviour
     }
 }
 
+[System.Serializable]
+public class EnemyRuntimeData
+{
+    public string enemyId;
+    public EnemyReward reward;
+    public int maxAlive;
+
+    public EnemyRuntimeData(string enemyId, EnemyReward sourceReward, int maxAlive)
+    {
+        this.enemyId = enemyId;
+        this.maxAlive = maxAlive;
+
+        reward = new EnemyReward
+        {
+            etherType = sourceReward.etherType,
+            amount = sourceReward.amount
+        };
+    }
+}

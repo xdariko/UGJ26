@@ -16,7 +16,8 @@ public class EnemySpawnEntry
     public bool unlockedByDefault = true;
     public string unlockKey;
 
-    public EnemyReward reward;
+    public EnemyReward startReward;
+    public int startMaxAlive = 5;
 
     public float weight = 1f;
     public SpawnShape spawnShape = SpawnShape.Ring;
@@ -25,7 +26,6 @@ public class EnemySpawnEntry
     public float maxRadius = 10f;
     public Vector2 rectHalfSize = new Vector2(10f, 6f);
 
-    public int maxAlive = 999;
 
     public bool canTeleport = false;
     public float teleportEveryMin = 2f;

@@ -6,11 +6,18 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnInterval = 1.6f;
     [SerializeField] private int maxPick = 8;
 
+    public float SpawnInterval
+    {
+        get => spawnInterval;
+        set => spawnInterval = Mathf.Max(0.05f, value);
+    }
+
     private int[] alive;
     private float t;
 
     private void Awake()
     {
+        G.spawner = this;
         Init();
     }
 
@@ -68,7 +75,12 @@ public class EnemySpawner : MonoBehaviour
         if (s.prefab == null) return false;
         if (!G.IsEnemyUnlocked(s.unlockKey, s.unlockedByDefault)) return false;
         if (alive == null || idx < 0 || idx >= alive.Length) return false;
-        if (alive[idx] >= s.maxAlive) return false;
+        int maxAlive = s.startMaxAlive;
+
+        if (G.upgradeTreeManager != null)
+            maxAlive = G.upgradeTreeManager.GetEnemyMaxAlive(s.id, s.startMaxAlive);
+
+        if (alive[idx] >= maxAlive) return false;
 
         return true;
     }
@@ -129,7 +141,11 @@ public class EnemySpawner : MonoBehaviour
         var enemy = go.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.SetupReward(s.reward);
+            EnemyReward reward = s.startReward;
+            if (G.upgradeTreeManager != null)
+                reward = G.upgradeTreeManager.GetEnemyReward(s.id, s.startReward);
+            enemy.SetupReward(reward);
+
             enemy.OnDied += () =>
             {
                 alive[idx] = Mathf.Max(0, alive[idx] - 1);
