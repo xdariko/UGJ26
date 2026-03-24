@@ -157,6 +157,10 @@ public class EnemySpawner : MonoBehaviour
         {
             teleport.Setup(s);
         }
+
+        EnemyJumpPatrol jumpPatrol = go.GetComponent<EnemyJumpPatrol>();
+        if (jumpPatrol != null)
+            jumpPatrol.Setup(s);
     }
 
     public void SetSpawnSet(EnemySpawnSet newSet)

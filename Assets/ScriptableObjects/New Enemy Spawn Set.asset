@@ -45,3 +45,19 @@ MonoBehaviour:
     canTeleport: 1
     teleportEveryMin: 2
     teleportEveryMax: 4
+  - id: frog
+    prefab: {fileID: 5489539238263800112, guid: 2a701be5a5870114b91f9f3b848f6796, type: 3}
+    unlockedByDefault: 1
+    unlockKey: frog
+    startReward:
+      etherType: 0
+      amount: 1
+    startMaxAlive: 5
+    weight: 1
+    spawnShape: 1
+    minRadius: 7
+    maxRadius: 0
+    rectHalfSize: {x: 20, y: 10}
+    canTeleport: 1
+    teleportEveryMin: 2
+    teleportEveryMax: 4
