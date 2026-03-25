@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StoryDatabase
   sequences:
   - {fileID: 11400000, guid: 24d6c7c180e8b5d4c9c9104447eb931d, type: 2}
+  - {fileID: 11400000, guid: 7a26cb161396329439cf782b603b02c6, type: 2}
+  - {fileID: 11400000, guid: 1cf2b4a8077340343a9b6d39e4d764c8, type: 2}
+  - {fileID: 11400000, guid: c55cb9abf4c162840aa0f0ecee537538, type: 2}

@@ -3,12 +3,16 @@ using UnityEngine.InputSystem;
 
 public class Main : MonoBehaviour
 {
-    [SerializeField] Transform circleCenter;
-    [SerializeField] GameObject etherOrbPrefab;
-    [SerializeField] GameObject damagePopupPrefab;
+    [SerializeField] private Transform circleCenter;
+    [SerializeField] private GameObject etherOrbPrefab;
+    [SerializeField] private GameObject damagePopupPrefab;
     [SerializeField] private EnemySpawnSet spawnSet;
 
-    public int StageIndex { get; private set; } = 0;
+    [Header("Imp Help")]
+    [SerializeField] private float impCheckIntervalMin = 4f;
+    [SerializeField] private float impCheckIntervalMax = 8f;
+
+    private float impTimer;
 
     private void Awake()
     {
@@ -23,15 +27,51 @@ public class Main : MonoBehaviour
     {
         Debug.Log($"storyPanel = {G.storyPanel}");
         G.storyPanel?.PlaySequence("intro_01");
-    }
 
+        ResetImpTimer();
+    }
 
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (G.storyPanel == null || !G.storyPanel.IsPlaying)
         {
-            TogglePause();
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                TogglePause();
+            }
         }
+
+        if (!G.IsPaused)
+            UpdateImpHelp();
+    }
+
+    private void UpdateImpHelp()
+    {
+        if (G.metaUpgrades == null)
+            return;
+
+        impTimer -= Time.deltaTime;
+        if (impTimer > 0f)
+            return;
+
+        ResetImpTimer();
+
+        if (!G.metaUpgrades.TryGetImpEther(out int amount))
+            return;
+
+        EtherType randomType = GetRandomEtherType();
+        RewardUtility.SpawnEtherOrbs(randomType, amount, G.circleCenter.position);
+    }
+
+    private EtherType GetRandomEtherType()
+    {
+        int value = Random.Range(0, 3);
+        return (EtherType)value;
+    }
+
+    private void ResetImpTimer()
+    {
+        impTimer = Random.Range(impCheckIntervalMin, impCheckIntervalMax);
     }
 
     private void TogglePause()

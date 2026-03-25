@@ -15,6 +15,8 @@ public static class G
     public static EnemySpawner spawner;
     public static EnemySpawnSet spawnSet;
     public static StoryPanelController storyPanel;
+    public static MetaUpgradeManager metaUpgrades;
+    public static MetaUpgradeChoicePanel metaUpgradePanel;
     public static bool IsPaused;
 
     public static int RedEther;
@@ -30,12 +32,6 @@ public static class G
 
     public static event System.Action<EtherType, int> OnEtherChanged;
     public static event System.Action<string> OnEnemyUnlocked;
-
-    //-------------------------------------------
-    public static int GlobalEnemyLimitBonus = 0;
-    public static float GlobalSpawnIntervalMultiplier = 1f;
-    public static float GlobalEnemyRewardMultiplier = 1f;
-    //-------------------------------------------
 
     public static void AddEther(EtherType type, int v)
     {
@@ -105,6 +101,22 @@ public static class G
             EtherType.Purple => PurpleEther,
             _ => 0,
         };
+    }
+
+    public static void ResetEther()
+    {
+        RedEther = 0;
+        WhiteEther = 0;
+        PurpleEther = 0;
+
+        OnEtherChanged?.Invoke(EtherType.Red, RedEther);
+        OnEtherChanged?.Invoke(EtherType.White, WhiteEther);
+        OnEtherChanged?.Invoke(EtherType.Purple, PurpleEther);
+    }
+
+    public static void ResetUnlockedEnemies()
+    {
+        unlockedEnemyKeys.Clear();
     }
 }
 

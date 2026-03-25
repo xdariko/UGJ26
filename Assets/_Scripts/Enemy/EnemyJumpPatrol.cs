@@ -57,7 +57,7 @@ public class EnemyJumpPatrol : MonoBehaviour
 
         jumpTriggerHash = Animator.StringToHash(jumpTriggerName);
 
-        Debug.Log($"[EnemyJumpPatrol] Awake on {name}. Animator found: {animator != null}", this);
+        //Debug.Log($"[EnemyJumpPatrol] Awake on {name}. Animator found: {animator != null}", this);
     }
 
     private void Start()
@@ -110,10 +110,10 @@ public class EnemyJumpPatrol : MonoBehaviour
         rectHalfSize = data.rectHalfSize;
         isSetupDone = true;
 
-        Debug.Log(
-            $"[EnemyJumpPatrol] Setup on {name}: shape={spawnShape}, minRadius={minRadius}, maxRadius={maxRadius}, rectHalfSize={rectHalfSize}",
-            this
-        );
+        //Debug.Log(
+        //    $"[EnemyJumpPatrol] Setup on {name}: shape={spawnShape}, minRadius={minRadius}, maxRadius={maxRadius}, rectHalfSize={rectHalfSize}",
+        //    this
+        //);
 
         StopJumpRoutine();
 
@@ -147,7 +147,7 @@ public class EnemyJumpPatrol : MonoBehaviour
                 continue;
             }
 
-            Debug.Log($"[EnemyJumpPatrol] Jump from {current} to {target}", this);
+            //Debug.Log($"[EnemyJumpPatrol] Jump from {current} to {target}", this);
             yield return JumpTo(target);
         }
 

@@ -82,7 +82,10 @@ public class UpgradeTreeManager : MonoBehaviour
         {
             foreach (var cost in levelData.costs)
             {
-                if (G.GetEther(cost.etherType) < cost.amount) return false;
+                int finalCost = GetModifiedUpgradeCost(cost.amount);
+
+                if (G.GetEther(cost.etherType) < finalCost)
+                    return false;
             }
         }
 
@@ -102,7 +105,10 @@ public class UpgradeTreeManager : MonoBehaviour
         {
             foreach (var cost in levelData.costs)
             {
-                if (!G.SpendEther(cost.etherType, cost.amount)) return false;
+                int finalCost = GetModifiedUpgradeCost(cost.amount);
+
+                if (!G.SpendEther(cost.etherType, finalCost))
+                    return false;
             }
         }
 
@@ -245,11 +251,13 @@ public class UpgradeTreeManager : MonoBehaviour
 
         foreach (var cost in levelData.costs)
         {
+            int finalCost = GetModifiedUpgradeCost(cost.amount);
+
             switch (cost.etherType)
             {
-                case EtherType.White: whiteCost += cost.amount; break;
-                case EtherType.Red: redCost += cost.amount; break;
-                case EtherType.Purple: purpleCost += cost.amount; break;
+                case EtherType.White: whiteCost += finalCost; break;
+                case EtherType.Red: redCost += finalCost; break;
+                case EtherType.Purple: purpleCost += finalCost; break;
             }
         }
     }
@@ -267,6 +275,29 @@ public class UpgradeTreeManager : MonoBehaviour
         if (node == null) return string.Empty;
         return node.description;
     }
+
+    private int GetModifiedUpgradeCost(int baseCost)
+    {
+        if (G.metaUpgrades == null)
+            return baseCost;
+
+        return G.metaUpgrades.ModifyUpgradeCost(baseCost);
+    }
+
+    public void ResetForNewRitual()
+    {
+        nodeLevels.Clear();
+
+        G.ClickDamage = 3;
+        G.CritChance = 0.05f;
+        G.CritMultiplier = 2f;
+        G.ClickRadius = 0.3f;
+
+        if (G.spawner != null)
+            G.spawner.SpawnInterval = 1.6f;
+
+        BuildEnemyRuntime();
+    }
 }
 
 [System.Serializable]
@@ -280,6 +311,12 @@ public class EnemyRuntimeData
     {
         this.enemyId = enemyId;
         this.maxAlive = maxAlive;
+
+        if (sourceReward == null)
+        {
+            reward = null;
+            return;
+        }
 
         reward = new EnemyReward
         {

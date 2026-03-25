@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 public class RitualProgressionManager : MonoBehaviour
 {
     [SerializeField] private RitualStageData[] stages;
+    [SerializeField] private RitualCompletionFlow[] completionFlows;
+    public int RitualCycleIndex { get; private set; } = 0;
 
     public int CurrentStageIndex { get; private set; } = 0;
     public bool IsCompleted { get; private set; }
@@ -11,6 +13,9 @@ public class RitualProgressionManager : MonoBehaviour
     private void Start()
     {
         G.ritualProgression = this;
+
+        if (G.metaUpgrades != null)
+            G.metaUpgrades.ResetRunOnlyCounters();
 
         if (stages == null || stages.Length == 0)
         {
@@ -57,11 +62,11 @@ public class RitualProgressionManager : MonoBehaviour
 
         CurrentStageIndex = index;
 
-        var stage = stages[index];
+        RitualStageData stage = stages[index];
 
         if (stage.objectsToActivate != null)
         {
-            foreach (var obj in stage.objectsToActivate)
+            foreach (GameObject obj in stage.objectsToActivate)
             {
                 if (obj != null)
                     obj.SetActive(true);
@@ -75,7 +80,7 @@ public class RitualProgressionManager : MonoBehaviour
     {
         if (IsCompleted) return;
 
-        var stage = GetCurrentStage();
+        RitualStageData stage = GetCurrentStage();
         if (stage == null) return;
 
         if (!CanAdvanceStage(stage))
@@ -102,7 +107,9 @@ public class RitualProgressionManager : MonoBehaviour
 
         foreach (var req in stage.requirements)
         {
-            if (G.GetEther(req.etherType) < req.requiredAmount)
+            int required = GetModifiedRequirement(req.requiredAmount);
+
+            if (G.GetEther(req.etherType) < required)
                 return false;
         }
 
@@ -119,7 +126,9 @@ public class RitualProgressionManager : MonoBehaviour
 
         foreach (var req in stage.requirements)
         {
-            bool spent = G.SpendEther(req.etherType, req.requiredAmount);
+            int required = GetModifiedRequirement(req.requiredAmount);
+
+            bool spent = G.SpendEther(req.etherType, required);
             if (!spent)
             {
                 Debug.LogWarning("Failed to spend ritual requirements.");
@@ -132,13 +141,13 @@ public class RitualProgressionManager : MonoBehaviour
 
     public int GetRequiredAmountFor(EtherType etherType)
     {
-        var stage = GetCurrentStage();
+        RitualStageData stage = GetCurrentStage();
         if (stage == null || stage.requirements == null) return 0;
 
         foreach (var req in stage.requirements)
         {
             if (req.etherType == etherType)
-                return req.requiredAmount;
+                return GetModifiedRequirement(req.requiredAmount);
         }
 
         return 0;
@@ -148,7 +157,7 @@ public class RitualProgressionManager : MonoBehaviour
     {
         if (G.ui == null) return;
 
-        var stage = GetCurrentStage();
+        RitualStageData stage = GetCurrentStage();
         if (stage == null)
         {
             G.ui.SetRitualCompleted();
@@ -157,7 +166,13 @@ public class RitualProgressionManager : MonoBehaviour
 
         bool canAdvance = CanAdvanceStage(stage);
 
-        G.ui.SetRitualStage(stage.title,GetRequiredAmountFor(EtherType.White),GetRequiredAmountFor(EtherType.Red),GetRequiredAmountFor(EtherType.Purple),canAdvance);
+        G.ui.SetRitualStage(
+            stage.title,
+            GetRequiredAmountFor(EtherType.White),
+            GetRequiredAmountFor(EtherType.Red),
+            GetRequiredAmountFor(EtherType.Purple),
+            canAdvance
+        );
     }
 
     private void CompleteRitual()
@@ -174,6 +189,103 @@ public class RitualProgressionManager : MonoBehaviour
 
     private void OnRitualCompleted()
     {
+        RitualCompletionFlow flow = GetCompletionFlowForCurrentRitual();
 
+        if (flow == null)
+        {
+            ShowMetaUpgradePanelAndRestart(true);
+            return;
+        }
+
+        bool hasStory = !string.IsNullOrEmpty(flow.storyId);
+
+        if (hasStory && G.storyPanel != null)
+        {
+            G.storyPanel.PlaySequence(flow.storyId, () =>
+            {
+                ShowMetaUpgradePanelAndRestart(flow.showMetaUpgradePanel);
+            });
+            return;
+        }
+
+        ShowMetaUpgradePanelAndRestart(flow.showMetaUpgradePanel);
+    }
+
+    private void ShowMetaUpgradePanelAndRestart(bool shouldShow)
+    {
+        if (shouldShow && G.metaUpgradePanel != null)
+        {
+            G.metaUpgradePanel.ShowRandomChoices(() =>
+            {
+                StartNewRitualCycle();
+            });
+            return;
+        }
+
+        StartNewRitualCycle();
+    }
+
+    private RitualCompletionFlow GetCompletionFlowForCurrentRitual()
+    {
+        if (completionFlows == null || completionFlows.Length == 0)
+            return null;
+
+        int ritualIndex = GetCurrentRitualIndex();
+
+        if (ritualIndex < 0 || ritualIndex >= completionFlows.Length)
+            return null;
+
+        return completionFlows[ritualIndex];
+    }
+
+    private int GetCurrentRitualIndex()
+    {
+        return RitualCycleIndex;
+    }
+
+    private int GetModifiedRequirement(int baseAmount)
+    {
+        if (G.metaUpgrades == null)
+            return baseAmount;
+
+        return G.metaUpgrades.ModifyRitualRequirement(baseAmount);
+    }
+
+    public void StartNewRitualCycle()
+    {
+        RitualCycleIndex++;
+
+        IsCompleted = false;
+        CurrentStageIndex = 0;
+
+        ResetActivatedStageObjects();
+
+        G.ResetEther();
+        G.ResetUnlockedEnemies();
+
+        if (G.metaUpgrades != null)
+            G.metaUpgrades.ResetRunOnlyCounters();
+
+        if (G.upgradeTreeManager != null)
+            G.upgradeTreeManager.ResetForNewRitual();
+
+        EnterStage(CurrentStageIndex);
+    }
+
+    private void ResetActivatedStageObjects()
+    {
+        if (stages == null) return;
+
+        foreach (var stage in stages)
+        {
+            if (stage == null || stage.objectsToActivate == null)
+                continue;
+
+            foreach (var obj in stage.objectsToActivate)
+            {
+                if (obj != null)
+                    obj.SetActive(false);
+            }
+        }
     }
 }
