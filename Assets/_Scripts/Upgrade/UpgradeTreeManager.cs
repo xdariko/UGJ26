@@ -188,15 +188,7 @@ public class UpgradeTreeManager : MonoBehaviour
 
     private bool IsUnlocked(UpgradeNode node)
     {
-        if (node.unlockedByDefault) return true;
-        if (node.requiredNodeIds == null || node.requiredNodeIds.Length == 0) return true;
-
-        foreach (string requiredId in node.requiredNodeIds)
-        {
-            UpgradeNode requiredNode = GetNode(requiredId);
-            if (requiredNode == null || GetCurrentLevel(requiredId) <= 0) return false;
-        }
-        return true;
+        return MeetsRequirements(node);
     }
 
     public int GetCurrentLevel(string nodeId)
@@ -215,16 +207,7 @@ public class UpgradeTreeManager : MonoBehaviour
     public bool ShouldNodeBeVisible(string nodeId)
     {
         UpgradeNode node = GetNode(nodeId);
-        if (node == null) return false;
-        if (node.unlockedByDefault) return true;
-        if (node.requiredNodeIds == null || node.requiredNodeIds.Length == 0) return true;
-
-        foreach (string requiredId in node.requiredNodeIds)
-        {
-            UpgradeNode requiredNode = GetNode(requiredId);
-            if (requiredNode == null || GetCurrentLevel(requiredId) <= 0) return false;
-        }
-        return true;
+        return MeetsRequirements(node);
     }
 
     public int GetMaxLevel(string nodeId)
@@ -297,6 +280,38 @@ public class UpgradeTreeManager : MonoBehaviour
             G.spawner.SpawnInterval = 1.6f;
 
         BuildEnemyRuntime();
+    }
+
+    private bool MeetsRequirements(UpgradeNode node)
+    {
+        if (node == null) return false;
+        if (node.unlockedByDefault) return true;
+        if (node.requirements == null || node.requirements.Length == 0) return true;
+
+        bool hasValidRequirement = false;
+
+        foreach (var requirement in node.requirements)
+        {
+            if (requirement == null)
+                continue;
+
+            if (string.IsNullOrEmpty(requirement.nodeId))
+                continue;
+
+            UpgradeNode requiredNode = GetNode(requirement.nodeId);
+            if (requiredNode == null)
+                continue;
+
+            hasValidRequirement = true;
+
+            int requiredLevel = Mathf.Max(1, requirement.requiredLevel);
+            int currentLevel = GetCurrentLevel(requirement.nodeId);
+
+            if (currentLevel >= requiredLevel)
+                return true;
+        }
+
+        return !hasValidRequirement ? true : false;
     }
 }
 

@@ -199,11 +199,26 @@ public class RitualProgressionManager : MonoBehaviour
 
         bool hasStory = !string.IsNullOrEmpty(flow.storyId);
 
+        if (flow.showMetaUpgradePanel && G.metaUpgradePanel != null)
+        {
+            G.metaUpgradePanel.PrepareRandomChoices(() =>
+            {
+                StartNewRitualCycle();
+            });
+        }
+
         if (hasStory && G.storyPanel != null)
         {
             G.storyPanel.PlaySequence(flow.storyId, () =>
             {
-                ShowMetaUpgradePanelAndRestart(flow.showMetaUpgradePanel);
+                if (flow.showMetaUpgradePanel && G.metaUpgradePanel != null)
+                {
+                    G.metaUpgradePanel.ShowPrepared();
+                }
+                else
+                {
+                    StartNewRitualCycle();
+                }
             });
             return;
         }

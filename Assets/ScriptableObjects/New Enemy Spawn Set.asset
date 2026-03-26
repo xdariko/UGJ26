@@ -20,7 +20,7 @@ MonoBehaviour:
     startReward:
       etherType: 1
       amount: 1
-    startMaxAlive: 5
+    startMaxAlive: 4
     weight: 1
     spawnShape: 1
     minRadius: 7
@@ -36,7 +36,7 @@ MonoBehaviour:
     startReward:
       etherType: 0
       amount: 1
-    startMaxAlive: 5
+    startMaxAlive: 2
     weight: 1
     spawnShape: 1
     minRadius: 7
@@ -47,12 +47,12 @@ MonoBehaviour:
     teleportEveryMax: 4
   - id: frog
     prefab: {fileID: 5489539238263800112, guid: 2a701be5a5870114b91f9f3b848f6796, type: 3}
-    unlockedByDefault: 1
+    unlockedByDefault: 0
     unlockKey: frog
     startReward:
-      etherType: 0
+      etherType: 2
       amount: 1
-    startMaxAlive: 5
+    startMaxAlive: 1
     weight: 1
     spawnShape: 1
     minRadius: 7

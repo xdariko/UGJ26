@@ -112,4 +112,4 @@ MonoBehaviour:
   spriteRenderer: {fileID: 8961057648325083866}
   whiteSprite: {fileID: 5395971653353831326, guid: df8b93c33e850db46aa5297e7655f156, type: 3}
   redSprite: {fileID: 995356197535908035, guid: 86a002c2a3a8489429a14805aa49a982, type: 3}
-  purpleSprite: {fileID: 0}
+  purpleSprite: {fileID: 8247068853118600752, guid: 65487e817b77fa64abd4ed71f6cf7a99, type: 3}

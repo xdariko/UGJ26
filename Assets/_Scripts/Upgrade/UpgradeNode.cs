@@ -9,7 +9,7 @@ public class UpgradeNode
 
     public bool unlockedByDefault = false;
 
-    public string[] requiredNodeIds;
+    public UpgradeRequirement[] requirements;
 
     public UpgradeLevelData[] levels;
 

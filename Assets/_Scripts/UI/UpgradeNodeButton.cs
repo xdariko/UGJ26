@@ -24,9 +24,12 @@ public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     [SerializeField] private UpgradeTooltipUI tooltipUI;
 
+    private Graphic[] childGraphics;
+
     private void Awake()
     {
         manager = G.upgradeTreeManager;
+        childGraphics = GetComponentsInChildren<Graphic>(true);
 
         if (button != null)
             button.onClick.AddListener(OnClick);
@@ -43,27 +46,61 @@ public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         bool visible = manager.ShouldNodeBeVisible(nodeId);
 
         SetVisible(connectorsToShowWhenWisible, visible);
-        if (!visible) return;
+
+        if (!visible)
+        {
+            if (button != null)
+                button.interactable = false;
+
+            if (levelText != null)
+                levelText.text = "";
+
+            SetNodeAlpha(0f);
+            return;
+        }
+
+        SetNodeAlpha(1f);
 
         int currentLevel = manager.GetCurrentLevel(nodeId);
         int maxLevel = manager.GetMaxLevel(nodeId);
 
-        if (levelText != null) levelText.text = $"{currentLevel}/{maxLevel}";
+        if (levelText != null)
+            levelText.text = $"{currentLevel}/{maxLevel}";
 
         bool isMaxLevel = manager.IsMaxLevel(nodeId);
         bool canBuy = manager.CanBuy(nodeId);
 
-        if (button != null) button.interactable = canBuy;
+        if (button != null)
+            button.interactable = canBuy;
 
         if (background != null)
         {
-            if (isMaxLevel)
-                background.color = maxLevelColor;
-            else if (canBuy)
-                background.color = canBuyColor;
-            else
-                background.color = cannotBuyColor;
+            Color targetColor;
 
+            if (isMaxLevel)
+                targetColor = maxLevelColor;
+            else if (canBuy)
+                targetColor = canBuyColor;
+            else
+                targetColor = cannotBuyColor;
+
+            targetColor.a = 1f;
+            background.color = targetColor;
+        }
+    }
+
+    private void SetNodeAlpha(float alpha)
+    {
+        if (childGraphics == null) return;
+
+        foreach (var graphic in childGraphics)
+        {
+            if (graphic == null)
+                continue;
+
+            Color c = graphic.color;
+            c.a = alpha;
+            graphic.color = c;
         }
     }
 
@@ -85,6 +122,7 @@ public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 obj.SetActive(value);
         }
     }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         ShowTooltip();
@@ -98,6 +136,7 @@ public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private void ShowTooltip()
     {
         if (tooltipUI == null || manager == null) return;
+        if (!manager.ShouldNodeBeVisible(nodeId)) return;
 
         manager.GetCurrentLevelCosts(nodeId, out int whiteCost, out int redCost, out int purpleCost);
 
@@ -117,4 +156,3 @@ public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
             tooltipUI.Hide();
     }
 }
-

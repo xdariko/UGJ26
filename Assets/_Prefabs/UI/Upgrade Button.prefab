@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.18490559, g: 0.18490559, b: 0.18490559, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -279,9 +279,9 @@ MonoBehaviour:
   levelText: {fileID: 3286157633064764988}
   connectorsToShowWhenWisible:
   - {fileID: 3371857636358255413}
-  canBuyColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  cannotBuyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  maxLevelColor: {r: 0, g: 1, b: 0, a: 1}
+  canBuyColor: {r: 0.78431374, g: 0.6431373, b: 0.28235295, a: 1}
+  cannotBuyColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
+  maxLevelColor: {r: 0, g: 0.46666667, b: 0.29803923, a: 1}
   tooltipUI: {fileID: 0}
 --- !u!1 &5428720913583107888
 GameObject:
