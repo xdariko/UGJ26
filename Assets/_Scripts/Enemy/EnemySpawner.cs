@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : ManagedBehaviour
 {
     [SerializeField] private EnemySpawnSet spawnSet;
     [SerializeField] private float spawnInterval = 1.6f;
@@ -42,10 +42,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnemyUnlocked(string key)
     {
-
     }
 
-    private void Update()
+    protected override void PausableUpdate()
     {
         if (spawnSet == null || spawnSet.enemies == null || spawnSet.enemies.Length == 0)
             return;
@@ -75,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
         if (s.prefab == null) return false;
         if (!G.IsEnemyUnlocked(s.unlockKey, s.unlockedByDefault)) return false;
         if (alive == null || idx < 0 || idx >= alive.Length) return false;
+
         int maxAlive = s.startMaxAlive;
 
         if (G.upgradeTreeManager != null)
@@ -144,6 +144,7 @@ public class EnemySpawner : MonoBehaviour
             EnemyReward reward = s.startReward;
             if (G.upgradeTreeManager != null)
                 reward = G.upgradeTreeManager.GetEnemyReward(s.id, s.startReward);
+
             enemy.SetupReward(reward);
 
             enemy.OnDied += () =>
@@ -153,7 +154,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         var teleport = go.GetComponent<EnemyTeleport>();
-        if (teleport != null) 
+        if (teleport != null)
         {
             teleport.Setup(s);
         }
@@ -192,5 +193,16 @@ public class EnemySpawner : MonoBehaviour
 
         float a = Random.Range(0f, Mathf.PI * 2f);
         return center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * minRadius;
+    }
+
+    public void ResetAliveState()
+    {
+        if (alive != null)
+        {
+            for (int i = 0; i < alive.Length; i++)
+                alive[i] = 0;
+        }
+
+        t = 0f;
     }
 }

@@ -18,6 +18,7 @@ public static class G
     public static MetaUpgradeManager metaUpgrades;
     public static MetaUpgradeChoicePanel metaUpgradePanel;
     public static bool IsPaused;
+    public static bool IsMenuOpen;
 
     public static int RedEther;
     public static int WhiteEther;
@@ -117,6 +118,11 @@ public static class G
     public static void ResetUnlockedEnemies()
     {
         unlockedEnemyKeys.Clear();
+    }
+
+    internal static void ResetMetaUpgrades()
+    {
+        metaUpgrades.ResetAllUpgrades();
     }
 }
 

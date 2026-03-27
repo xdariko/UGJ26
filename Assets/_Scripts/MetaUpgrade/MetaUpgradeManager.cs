@@ -35,6 +35,26 @@ public class MetaUpgradeManager : MonoBehaviour
         killCounter = 0;
     }
 
+    public void ResetAllUpgrades()
+    {
+        doubleCurrencyChance = 0f;
+        enemyRewardMultiplier = 1f;
+        extraCritEther = 0;
+        upgradeCostMultiplier = 1f;
+        bonusKillEtherChance = 0f;
+        bonusKillEtherAmount = 0;
+
+        greedKillStep = 0;
+        greedKillBonus = 0;
+
+        ritualRequirementMultiplier = 1f;
+
+        impBringEtherChance = 0f;
+        impBringEtherAmount = 0;
+
+        killCounter = 0;
+    }
+
     public void ApplyUpgrade(MetaUpgradeData upgrade)
     {
         if (upgrade == null || upgrade.effects == null)

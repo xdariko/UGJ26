@@ -13,6 +13,7 @@ public class UpgradeTreeManager : MonoBehaviour
     {
         G.upgradeTreeManager = this;
         BuildEnemyRuntime();
+        
     }
 
     private void BuildEnemyRuntime()
@@ -277,7 +278,7 @@ public class UpgradeTreeManager : MonoBehaviour
         G.ClickRadius = 0.3f;
 
         if (G.spawner != null)
-            G.spawner.SpawnInterval = 1.6f;
+            G.spawner.SpawnInterval = 1.2f;
 
         BuildEnemyRuntime();
     }

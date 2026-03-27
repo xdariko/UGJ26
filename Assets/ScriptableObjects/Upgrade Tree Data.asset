@@ -278,7 +278,7 @@ MonoBehaviour:
         amount: 6
       effects:
       - effectType: 8
-        floatValue: 0.94
+        floatValue: 0.9
         intValue: 0
         stringValue: 
     - costs:
@@ -286,7 +286,7 @@ MonoBehaviour:
         amount: 10
       effects:
       - effectType: 8
-        floatValue: 0.93
+        floatValue: 0.8
         intValue: 0
         stringValue: 
     - costs:
@@ -296,7 +296,7 @@ MonoBehaviour:
         amount: 4
       effects:
       - effectType: 8
-        floatValue: 0.89
+        floatValue: 0.7
         intValue: 0
         stringValue: 
     - costs:

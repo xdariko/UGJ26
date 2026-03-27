@@ -25,7 +25,7 @@ public class ClickAoeAttack : MonoBehaviour
     private void Update()
     {
         var mouse = Mouse.current;
-        if (mouse == null || cam == null) return;
+        if (mouse == null || cam == null || G.IsPaused || G.IsMenuOpen) return;
 
         bool pressedThisFrame = mouse.leftButton.wasPressedThisFrame;
         bool isHeld = mouse.leftButton.isPressed;

@@ -109,7 +109,10 @@ public class UpgradeNodeButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (manager == null) return;
 
         if (manager.Buy(nodeId))
+        {
             Refresh();
+            ShowTooltip();
+        }
     }
 
     private void SetVisible(GameObject[] objects, bool value)

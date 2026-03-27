@@ -10,6 +10,13 @@ public class RitualProgressionManager : MonoBehaviour
     public int CurrentStageIndex { get; private set; } = 0;
     public bool IsCompleted { get; private set; }
 
+    [SerializeField] private int maxRitualCycles = 3;
+
+    private bool IsLastRitual()
+    {
+        return RitualCycleIndex >= maxRitualCycles - 1;
+    }
+
     private void Start()
     {
         G.ritualProgression = this;
@@ -189,29 +196,39 @@ public class RitualProgressionManager : MonoBehaviour
 
     private void OnRitualCompleted()
     {
+        ClearAllEnemies();
+
         RitualCompletionFlow flow = GetCompletionFlowForCurrentRitual();
+
+        bool isLastRitual = IsLastRitual();
 
         if (flow == null)
         {
-            ShowMetaUpgradePanelAndRestart(true);
+            if (isLastRitual)
+            {
+                if (G.ui != null)
+                    G.ui.SetFinalPanel(true);
+            }
+            else
+            {
+                ShowMetaUpgradePanelAndRestart(true);
+            }
+
             return;
         }
 
         bool hasStory = !string.IsNullOrEmpty(flow.storyId);
 
-        if (flow.showMetaUpgradePanel && G.metaUpgradePanel != null)
-        {
-            G.metaUpgradePanel.PrepareRandomChoices(() =>
-            {
-                StartNewRitualCycle();
-            });
-        }
-
         if (hasStory && G.storyPanel != null)
         {
             G.storyPanel.PlaySequence(flow.storyId, () =>
             {
-                if (flow.showMetaUpgradePanel && G.metaUpgradePanel != null)
+                if (isLastRitual)
+                {
+                    if (G.ui != null)
+                        G.ui.SetFinalPanel(true);
+                }
+                else if (flow.showMetaUpgradePanel && G.metaUpgradePanel != null)
                 {
                     G.metaUpgradePanel.ShowPrepared();
                 }
@@ -220,6 +237,23 @@ public class RitualProgressionManager : MonoBehaviour
                     StartNewRitualCycle();
                 }
             });
+
+            if (!isLastRitual && flow.showMetaUpgradePanel && G.metaUpgradePanel != null)
+            {
+                G.metaUpgradePanel.PrepareRandomChoices(() =>
+                {
+                    StartNewRitualCycle();
+                });
+            }
+
+            return;
+        }
+
+        if (isLastRitual)
+        {
+            if (G.ui != null)
+                G.ui.SetFinalPanel(true);
+
             return;
         }
 
@@ -287,6 +321,27 @@ public class RitualProgressionManager : MonoBehaviour
         EnterStage(CurrentStageIndex);
     }
 
+    public void StartNewGame()
+    {
+        RitualCycleIndex=0;
+
+        IsCompleted = false;
+        CurrentStageIndex = 0;
+
+        ResetActivatedStageObjects();
+
+        G.ResetEther();
+        G.ResetUnlockedEnemies();
+        G.ResetMetaUpgrades();
+        if (G.metaUpgrades != null)
+            G.metaUpgrades.ResetRunOnlyCounters();
+
+        if (G.upgradeTreeManager != null)
+            G.upgradeTreeManager.ResetForNewRitual();
+
+        EnterStage(CurrentStageIndex);
+    }
+
     private void ResetActivatedStageObjects()
     {
         if (stages == null) return;
@@ -302,5 +357,19 @@ public class RitualProgressionManager : MonoBehaviour
                     obj.SetActive(false);
             }
         }
+    }
+
+    private void ClearAllEnemies()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy != null)
+                Destroy(enemy.gameObject);
+        }
+
+        if (G.spawner != null)
+            G.spawner.ResetAliveState();
     }
 }
