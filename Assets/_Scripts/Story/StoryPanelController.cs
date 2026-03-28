@@ -198,7 +198,10 @@ public class StoryPanelController : MonoBehaviour
         isLineFullyShown = false;
 
         if (view != null)
+        {
             view.ClearBody();
+            view.SetImage(line != null ? line.image : null);
+        }
 
         string fullText = line != null ? line.text ?? string.Empty : string.Empty;
 

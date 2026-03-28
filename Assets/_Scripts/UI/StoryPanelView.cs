@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoryPanelView : MonoBehaviour
 {
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TMP_Text bodyText;
+    [SerializeField] private Image storyImage;
     [SerializeField] private float fadeDuration = 0.2f;
 
     private void Awake()
@@ -30,7 +32,9 @@ public class StoryPanelView : MonoBehaviour
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+
         ClearBody();
+        SetImage(null);
     }
 
     public IEnumerator ShowRoutine()
@@ -53,7 +57,9 @@ public class StoryPanelView : MonoBehaviour
 
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+
         ClearBody();
+        SetImage(null);
     }
 
     public void SetBody(string text)
@@ -66,6 +72,22 @@ public class StoryPanelView : MonoBehaviour
     {
         if (bodyText != null)
             bodyText.text = string.Empty;
+    }
+
+    public void SetImage(Sprite sprite)
+    {
+        if (storyImage == null)
+            return;
+
+        if (sprite == null)
+        {
+            storyImage.sprite = null;
+            storyImage.gameObject.SetActive(false);
+            return;
+        }
+
+        storyImage.sprite = sprite;
+        storyImage.gameObject.SetActive(true);
     }
 
     private IEnumerator FadeTo(float target)
