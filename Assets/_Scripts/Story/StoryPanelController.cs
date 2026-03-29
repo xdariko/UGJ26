@@ -40,9 +40,15 @@ public class StoryPanelController : MonoBehaviour
         if (view != null)
         {
             if (firstSequenceStartsVisible)
+            {
+                view.gameObject.SetActive(true);
                 view.SetInstantVisible();
+            }
             else
+            {
                 view.SetInstantHidden();
+                view.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -50,12 +56,6 @@ public class StoryPanelController : MonoBehaviour
     {
         if (!isPlaying)
             return;
-
-        if (WasClosePressed())
-        {
-            closeRequested = true;
-            return;
-        }
 
         if (WasContinuePressed())
         {
@@ -136,6 +136,9 @@ public class StoryPanelController : MonoBehaviour
         isPlaying = true;
         G.IsPaused = true;
 
+        if (view != null)
+            view.gameObject.SetActive(true);
+
         skipRequested = false;
         nextRequested = false;
         closeRequested = false;
@@ -184,7 +187,10 @@ public class StoryPanelController : MonoBehaviour
         G.IsPaused = false;
 
         if (view != null)
+        {
             yield return StartCoroutine(view.HideRoutine());
+            view.gameObject.SetActive(false);
+        }
 
         Action callback = onSequenceFinished;
         onSequenceFinished = null;

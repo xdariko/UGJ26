@@ -196,8 +196,6 @@ public class RitualProgressionManager : MonoBehaviour
 
     private void OnRitualCompleted()
     {
-        ClearAllEnemies();
-
         RitualCompletionFlow flow = GetCompletionFlowForCurrentRitual();
 
         bool isLastRitual = IsLastRitual();
@@ -307,6 +305,7 @@ public class RitualProgressionManager : MonoBehaviour
         IsCompleted = false;
         CurrentStageIndex = 0;
 
+        ClearAllEnemies();
         ResetActivatedStageObjects();
 
         G.ResetEther();
@@ -327,8 +326,6 @@ public class RitualProgressionManager : MonoBehaviour
 
         IsCompleted = false;
         CurrentStageIndex = 0;
-
-        ResetActivatedStageObjects();
 
         G.ResetEther();
         G.ResetUnlockedEnemies();

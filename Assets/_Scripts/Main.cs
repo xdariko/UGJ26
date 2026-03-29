@@ -33,12 +33,10 @@ public class Main : MonoBehaviour
 
     private void Update()
     {
-        if (G.storyPanel == null || !G.storyPanel.IsPlaying)
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-            {
-                TogglePause();
-            }
+            Debug.Log("ESC PRESSED");
+            TogglePause();
         }
 
         if (!G.IsPaused)
@@ -76,15 +74,23 @@ public class Main : MonoBehaviour
 
     private void TogglePause()
     {
+        Debug.Log("TogglePause called");
         SetPause(!G.IsPaused);
     }
 
     private void SetPause(bool paused)
     {
+        Debug.Log($"SetPause({paused}) | G.ui = {G.ui}");
+
         G.IsPaused = paused;
         Time.timeScale = paused ? 0f : 1f;
 
         if (G.ui != null)
             G.ui.SetPausePanel(paused);
+    }
+
+    public void ResumeGame()
+    {
+        SetPause(false);
     }
 }

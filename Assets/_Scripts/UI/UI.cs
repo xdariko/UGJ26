@@ -16,6 +16,7 @@ public class UI : MonoBehaviour
 
 
     [Header("Pause Panel Buttons")]
+    [SerializeField] private Button continueButton;
     [SerializeField] private Button exitButton;
 
     [Header("Final Panel Buttons")]
@@ -40,7 +41,9 @@ public class UI : MonoBehaviour
 
         if (closeUpgradesTreeButton != null)
             closeUpgradesTreeButton.onClick.AddListener(OnCloseUpgradesTreeClicked);
-
+        
+        if (continueButton != null)
+            continueButton.onClick.AddListener(OnContinueClicked);
 
         if (ritualPanelUI != null)
             ritualPanelUI.BindNextStageButton(OnNextStageClicked);
@@ -53,6 +56,12 @@ public class UI : MonoBehaviour
 
         if (finalExitButton != null)
             finalExitButton.onClick.AddListener(OnExitClicked);
+    }
+
+    private void OnContinueClicked()
+    {
+        if (G.main != null)
+            G.main.ResumeGame();
     }
 
     private void OnCloseUpgradesTreeClicked()
@@ -75,6 +84,9 @@ public class UI : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (continueButton != null)
+            continueButton.onClick.RemoveListener(OnContinueClicked);
+
         if (exitButton != null)
             exitButton.onClick.RemoveListener(OnExitClicked);
 
@@ -93,6 +105,7 @@ public class UI : MonoBehaviour
     private void OnRestartClicked()
     {
         Time.timeScale = 1f;
+        G.ritualProgression.StartNewGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -128,5 +141,15 @@ public class UI : MonoBehaviour
     {
         if (G.ritualProgression != null)
             G.ritualProgression.TryAdvanceStage();
+    }
+
+    public bool IsUpgradesPanelOpen()
+    {
+        return upgradesPanel != null && upgradesPanel.activeInHierarchy;
+    }
+
+    public bool IsFinalPanelOpen()
+    {
+        return finalPanel != null && finalPanel.activeInHierarchy;
     }
 }
